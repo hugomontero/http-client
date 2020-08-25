@@ -34,7 +34,7 @@ const del = request_type => async ({host, port, path, headers})=>{
 
 
 
-module.export = {
+module.exports = {
     https:{
         get: get(HTTPS),
         post: post(HTTPS),

@@ -1,15 +1,17 @@
 const http = require("http")
 const https = require("https")
 
-const request = ({requestType}) => ({host, port, path, method, body = null, headers, timeout=null})=>{
+const request = ({requestType}) => ({host, port=null, path=null, method, body = null, headers=null, options: {timeout=null , rejectUnauthorized=false}} )=>{
     let payload = null
+
     const options = {
         hostname: host,
         port,
         path,
         method,
-        headers,
-        timeout: timeout || 3000
+        headers: headers || {'Content-Type': 'text/html'},
+        timeout: timeout || 3000,
+        rejectUnauthorized
     }
 
     if(body){
@@ -18,12 +20,10 @@ const request = ({requestType}) => ({host, port, path, method, body = null, head
     }
 
     return new Promise((resolve, reject)=>{
+
         const req = requestType.request(options, res=>{
             res.setEncoding('utf8')
             let response = ''
-            if(payload){
-                res.write(payload)
-            }
             res.on('data', chunk=>{
                 response += chunk
             })
@@ -31,19 +31,20 @@ const request = ({requestType}) => ({host, port, path, method, body = null, head
             res.on('end', () =>{
                 resolve(response)
             })
-
-            res.on('error', error=>{
-                reject(error)
-            })
-
-            req.end()
-
-            req.on('timeout', ()=>{
-                req.abort()
-                reject("timeout error")
-            })
-
         })
+
+        req.on('error', error=>{
+            reject(error)
+        })
+        if(payload){
+            req.write(payload)
+        }
+        req.on('timeout', ()=>{
+            req.abort()
+            reject("timeout error")
+        })
+
+        req.end()
 
     })
 }
