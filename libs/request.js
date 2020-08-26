@@ -37,7 +37,8 @@ const request = ({requestType}) => async ({host, port=null, path=null, method, b
                 response += chunk
             })
 
-            res.on('end', () =>{
+            res.on('end', chunk =>{
+                response += chunk
                 resolve(response)
             })
         })
