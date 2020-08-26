@@ -1,7 +1,7 @@
 # http-client
 Http client libraries consiste en una librería que se puede utilizar para hacer peticiones tipo http y https
 
-##Instalación
+## Instalación
 Este es un proyecto de tipo librería por lo que para utilizarla deberá agregar el repositorio como dependencia
 
 A pesar de no utilizar ningún tipo de dependencia, es recomendable utilizar este comando para la instalación:
@@ -11,7 +11,7 @@ npm i
 ```
 
 
-##Uso
+## Uso
 Para usar la librería dentro de un proyecto, se debe agregar como dependencia la librería (esto en package.json), tal como se muestra a continuación:
 ```
     "dependencies": {
@@ -26,7 +26,7 @@ const { http, https } = require("http-client")
 ```
 
 
-##Funciones
+## Funciones
 Las funciones que se pueden utilizar en cada caso (http o https) son las siguientes:
  * get
  * post
