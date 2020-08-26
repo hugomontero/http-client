@@ -1,7 +1,16 @@
 const http = require("http")
 const https = require("https")
 
-const request = ({requestType}) => ({host, port=null, path=null, method, body = null, headers=null, options: {timeout=null , rejectUnauthorized=false}} )=>{
+const bodyParser = async (body, headers)=>{
+     if(headers && headers['Content-Type']==='application/json'){
+         return JSON.stringify(body)
+     }
+
+     return body
+}
+
+
+const request = ({requestType}) => async ({host, port=null, path=null, method, body = null, headers=null, options: {timeout=null , rejectUnauthorized=false}} )=>{
     let payload = null
 
     const options = {
@@ -15,7 +24,7 @@ const request = ({requestType}) => ({host, port=null, path=null, method, body = 
     }
 
     if(body){
-        payload = (body instanceof Object) ? JSON.stringify(body) : body
+        payload = await bodyParser(body)
         options.headers['Content-Length'] = Buffer.byteLength(payload)
     }
 
